@@ -1,0 +1,43 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "prefix": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "cosmosDBName": "[concat(parameters('prefix'), 'cdb')]",
+        "defaultExperience": "DocumentDB",
+        /* TODO: MAKE IT BETTER!! */
+        "locationName": {
+            "westeurope": "West Europe",
+            "southeastaisa": "South East Asia"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2015-04-08",
+            "kind": "GlobalDocumentDB",
+            "type": "Microsoft.DocumentDb/databaseAccounts",
+            "name": "[variables('cosmosDbName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "databaseAccountOfferType": "Standard",
+                "locations": [
+                    {
+                        "id": "[concat(variables('cosmosDbName'), '-', parameters('location'))]",
+                        "failoverPriority": 0,
+                        "locationName": "[variables('locationName')[parameters('location')]]"
+                    }
+                ]
+            },
+            "tags": {
+                "defaultExperience": "[variables('defaultExperience')]"
+            }
+        }
+    ]
+}

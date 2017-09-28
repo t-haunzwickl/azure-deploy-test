@@ -8,13 +8,21 @@
         "environment": {
             "type": "string",
             "defaultValue": "tst"
+        },
+        "templatesBaseUrl": {
+            "type": "string",
+            "metadata": {
+                "description": "Linked Templates base url"
+            },
+            "defaultValue": "https://raw.githubusercontent.com/t-haunzwickl/azure-deploy-test/master/nestedtemplates"
         }
     },
     "variables": {
         "location": "[resourceGroup().location]",
         "prefix": "[concat(parameters('team'), '-', parameters('environment'), '-')]",
         "artifacts": {
-            "provisioningWebAppsUrl": "https://raw.githubusercontent.com/t-haunzwickl/azure-deploy-test/master/nestedtemplates/provisioningWebApps.json"
+            "provisioningWebAppsUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningWebApps.json')]",
+            "provisioningCosmosDBUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningCosmosDB.json')]"
         }
     },
     "resources": [
@@ -22,11 +30,32 @@
             "name": "ProvisioningWebApps",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
-            "comments": "This resource will create an App Service as well as Webapps",
+            "comments": "This resource will create an App Service as well as WebApps",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
                     "uri": "[variables('artifacts').provisioningWebAppsUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                  "location": {
+                      "value": "[variables('location')]"
+                  },
+                  "prefix": {
+                      "value": "[variables('prefix')]"
+                  }
+                }
+            }
+        },
+        {
+            "name": "ProvisioningWebApps",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "comments": "This resource will create a CosmosDB",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').provisioningCosmosDBUrl]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
