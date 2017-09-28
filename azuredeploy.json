@@ -13,10 +13,8 @@
     "variables": {
         "location": "[resourceGroup().location]",
         "prefix": "[concat(parameters('team'), '-', parameters('environment'), '-')]",
-
-        "hostingPlanName": "[concat(variables('prefix'), 'asp')]",
         "artifacts": {
-            "provisioningWebAppsUrl": "nestedTemplates/provisioningWebApps.json"
+            "provisioningWebAppsUrl": "https://raw.githubusercontent.com/t-haunzwickl/azure-deploy-test/master/nestedtemplates/provisioningWebApps.json"
         }
     },
     "resources": [
@@ -38,9 +36,8 @@
                   "prefix": {
                       "value": "[variables('prefix')]"
                   }
-                 
                 }
             }
-        },
+        }
     ]
 }
