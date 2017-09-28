@@ -48,7 +48,7 @@
             }
         },
         {
-            "name": "ProvisioningWebApps",
+            "name": "ProvisioningCosmosDB",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "comments": "This resource will create a CosmosDB",
