@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "prefix": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "cdnPofileName": "[concat(parameters('prefix'), 'cdn')]",
+        "skuCDN": {
+            "name": "standard_akamai"
+            // "name": "Premium_Verizon"
+        },
+        "profileProperties": {
+            "provisioningState": "Succeeded",
+            "resourceState": "Active"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2016-04-02",
+            "name": "[variables('cdnPofileName')]",
+            "location": "[parameters('location')]",
+            "sku": "[variables('skuCDN')]",
+            "properties": "[variables('profileProperties')]",
+            "type": "Microsoft.Cdn/profiles"
+        }
+    ]
+}

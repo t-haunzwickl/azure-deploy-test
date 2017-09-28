@@ -22,7 +22,8 @@
         "prefix": "[concat(parameters('team'), '-', parameters('environment'), '-')]",
         "artifacts": {
             "provisioningWebAppsUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningWebApps.json')]",
-            "provisioningCosmosDBUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningCosmosDB.json')]"
+            "provisioningCosmosDBUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningCosmosDB.json')]",
+            "provisioningCDNProfileUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningCDNProfile.json')]"
         }
     },
     "resources": [
@@ -56,6 +57,27 @@
                 "mode": "Incremental",
                 "templateLink": {
                     "uri": "[variables('artifacts').provisioningCosmosDBUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                  "location": {
+                      "value": "[variables('location')]"
+                  },
+                  "prefix": {
+                      "value": "[variables('prefix')]"
+                  }
+                }
+            }
+        },
+        {
+            "name": "ProvisioningCDNProfile",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "comments": "This resource will create a CDN PRofile",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
