@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "prefix": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "hostingPlanName": "[concat(parameters('prefix'), 'asp')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2015-08-01",
+            "name": "[variables('hostingPlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[parameters('location')]",
+            "properties": {
+                "name": "[variables('hostingPlanName')]"
+            },
+            "sku": {
+                "name": "S1",
+                "tier": "Standard"
+            }
+        }
+    ]
+}

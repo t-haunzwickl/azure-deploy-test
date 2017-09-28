@@ -1,0 +1,46 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "team": {
+            "type": "string"
+        },
+        "environment": {
+            "type": "string",
+            "defaultValue": "tst"
+        }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "prefix": "[concat(parameters('team'), '-', parameters('environment'), '-')]",
+
+        "hostingPlanName": "[concat(variables('prefix'), 'asp')]",
+        "artifacts": {
+            "provisioningWebAppsUrl": "nestedTemplates/provisioningWebApps.json"
+        }
+    },
+    "resources": [
+        {
+            "name": "ProvisioningWebApps",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "comments": "This resource will create an App Service as well as Webapps",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').provisioningWebAppsUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                  "location": {
+                      "value": "[variables('location')]"
+                  },
+                  "prefix": {
+                      "value": "[variables('prefix')]"
+                  }
+                 
+                }
+            }
+        },
+    ]
+}
