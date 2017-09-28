@@ -11,7 +11,16 @@
     },
     "variables": {
         "hostingPlanName": "[concat(parameters('prefix'), 'asp')]",
-        "appServiceName": "[concat(parameters('prefix'), 'main-wap')]"
+        "appServices": {
+            "main": "[concat(parameters('prefix'), 'main-wap')]",
+            "usr": "[concat(parameters('prefix'), 'usr-wap')]",
+            "usr_adm": "[concat(parameters('prefix'), 'usr-adm-wap')]",
+            "ten": "[concat(parameters('prefix'), 'ten-wap')]"
+        },
+        "appServiceSKU": {
+            "name": "S1",
+            "tier": "Standard"
+        }
     },
     "resources": [
         {
@@ -23,20 +32,59 @@
                 "name": "[variables('hostingPlanName')]"
             },
             "sku": {
-                "name": "S1",
-                "tier": "Standard"
+                "name": "[variables('appServiceSKU').name]",
+                "tier": "[variables('appServiceSKU').tier]"
             }
         },
         {
             "apiVersion": "2015-08-01",
             "location": "[parameters('location')]",
-            "name": "[variables('appServiceName')]",
+            "name": "[variables('appServices').main]",
             "type": "Microsoft.Web/sites",
             "dependsOn": [
                 "[concat('Microsoft.Web/serverFarms/', variables('hostingPlanName'))]"
             ],
             "properties": {
-                "name": "[variables('appServiceName')]",
+                "name": "[variables('appServices').main]",
+                "serverFarmId": "[variables('hostingPlanName')]"
+            }
+        },
+        {
+            "apiVersion": "2015-08-01",
+            "location": "[parameters('location')]",
+            "name": "[variables('appServices').usr]",
+            "type": "Microsoft.Web/sites",
+            "dependsOn": [
+                "[concat('Microsoft.Web/serverFarms/', variables('hostingPlanName'))]"
+            ],
+            "properties": {
+                "name": "[variables('appServices').usr]",
+                "serverFarmId": "[variables('hostingPlanName')]"
+            }
+        },
+        {
+            "apiVersion": "2015-08-01",
+            "location": "[parameters('location')]",
+            "name": "[variables('appServices').usr_adm]",
+            "type": "Microsoft.Web/sites",
+            "dependsOn": [
+                "[concat('Microsoft.Web/serverFarms/', variables('hostingPlanName'))]"
+            ],
+            "properties": {
+                "name": "[variables('appServices').usr_adm]",
+                "serverFarmId": "[variables('hostingPlanName')]"
+            }
+        },
+        {
+            "apiVersion": "2015-08-01",
+            "location": "[parameters('location')]",
+            "name": "[variables('appServices').ten]",
+            "type": "Microsoft.Web/sites",
+            "dependsOn": [
+                "[concat('Microsoft.Web/serverFarms/', variables('hostingPlanName'))]"
+            ],
+            "properties": {
+                "name": "[variables('appServices').ten]",
                 "serverFarmId": "[variables('hostingPlanName')]"
             }
         }
