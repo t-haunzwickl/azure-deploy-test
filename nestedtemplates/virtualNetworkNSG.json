@@ -7,16 +7,21 @@
         },
         "location": {
             "type": "string"
+        },
+        "nsgName": {
+            "type": "string"
+        },
+        "vNetName": {
+            "type": "string"
         }
     },
     "variables": {
-        "nsgName": "[concat(parameters('prefix'), 'nsg')]",
-        "vNetName": "[concat(parameters('prefix'), 'vnt')]"
+        
     },
     "resources": [
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('nsgName')]",
+            "name": "[parameters('nsgName')]",
             "apiVersion": "2017-06-01",
             "location": "[parameters('location')]",
             "properties": {
@@ -53,10 +58,10 @@
             "dependsOn": []
         },
         {
-            "name": "[variables('vNetName')]",
+            "name": "[parameters('vNetName')]",
             "type": "Microsoft.Network/virtualNetworks",
             "dependsOn": [
-                "[concat('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]"
+                "[concat('Microsoft.Network/networkSecurityGroups/', parameters('nsgName'))]"
             ],
             "location": "[parameters('location')]",
             "apiVersion": "2015-06-15",

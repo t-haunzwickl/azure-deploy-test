@@ -33,15 +33,25 @@
             "EventGridTopic": "[concat(parameters('templatesBaseUrl'), '/EventGridTopic.json')]",
             "APIManagementServiceUrl": "[concat(parameters('templatesBaseUrl'), '/APIManagementService.json')]",
             "virtualNetworkNSGUrl": "[concat(parameters('templatesBaseUrl'), '/virtualNetworkNSG.json')]",
+            "networkInterfaceUrl": "[concat(parameters('templatesBaseUrl'), '/networkInterface.json')]",
 
-            "configureCDNEndpoints": "[concat(parameters('templatesBaseUrl'), '/configureCDNEndpoint.json')]"
+            "CDNEndpointsUrl": "[concat(parameters('templatesBaseUrl'), '/CDNEndpoint.json')]"
         },
         "siteName": [
             "[concat(variables('prefix'), 'main')]",
             "[concat(variables('prefix'), 'usr')]",
             "[concat(variables('prefix'), 'usr-adm')]",
             "[concat(variables('prefix'), 'ten')]"
-        ]
+        ],
+
+        "networkSecurityGroupName": "[concat(variables('prefix'), 'nsg')]",
+        "virtualNetworkName": "[concat(variables('prefix'), 'vnt')]",
+
+        "VnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
+        "derivedIds": {
+            "subnet": "[concat(variables('VnetID'),'/subnets/', 'default')]",
+            "nsg": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('virtualNetworkName'))]"
+        }
     },
     "resources": [
         {
@@ -121,7 +131,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('artifacts').configureCDNEndpoints]",
+                    "uri": "[variables('artifacts').CDNEndpointsUrl]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -202,6 +212,36 @@
                     },
                     "prefix": {
                         "value": "[variables('prefix')]"
+                    },
+                    "nsgName": {
+                        "value": "[variables('networkSecurityGroupName')]"
+                    },
+                    "vNetName": {
+                        "value": "[variables('virtualNetworkName')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "networkInterface",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "comments": "This resource will create the network interface",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').networkInterfaceUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "prefix": {
+                        "value": "[variables('prefix')]"
+                    },
+                    "subnetRef": {
+                        "value": "[variables('derivedIds').subnet]"
                     }
                 }
             }
