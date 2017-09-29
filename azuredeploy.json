@@ -32,6 +32,7 @@
             "CDNProfileUrl": "[concat(parameters('templatesBaseUrl'), '/CDNProfile.json')]",
             "EventGridTopic": "[concat(parameters('templatesBaseUrl'), '/EventGridTopic.json')]",
             "APIManagementServiceUrl": "[concat(parameters('templatesBaseUrl'), '/APIManagementService.json')]",
+            "virtualNetworkNSGUrl": "[concat(parameters('templatesBaseUrl'), '/virtualNetworkNSG.json')]",
 
             "configureCDNEndpoints": "[concat(parameters('templatesBaseUrl'), '/configureCDNEndpoint.json')]"
         },
@@ -157,7 +158,7 @@
                 }
             }
         },
-        {
+        /*{
             "name": "APIManagementService",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -180,6 +181,27 @@
                     },
                     "publisherName": {
                         "value": "[parameters('apiPublisherName')]"
+                    }
+                }
+            }
+        },*/
+        {
+            "name": "VirtualNetworkNSG",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "comments": "This resource will create a vNet and NSG",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').virtualNetworkNSGUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "prefix": {
+                        "value": "[variables('prefix')]"
                     }
                 }
             }
