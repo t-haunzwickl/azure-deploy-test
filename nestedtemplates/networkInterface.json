@@ -45,9 +45,6 @@
               "[resourceId('Microsoft.Network/publicIPAddresses/', variables('publicIPName'))]"
             ],
             "apiVersion": "2015-06-15",
-            "tags": {
-              "Project": "BluePrint"
-            },
             "properties": {
               "ipConfigurations": [
                 {

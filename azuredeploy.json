@@ -21,6 +21,12 @@
                 "description": "Linked Templates base url"
             },
             "defaultValue": "https://raw.githubusercontent.com/t-haunzwickl/azure-deploy-test/master/nestedtemplates"
+        },
+        "vmAdminUsername": {
+            "type": "string"
+        },
+        "vmAdminPassword": {
+            "type": "securestring"
         }
     },
     "variables": {
@@ -34,6 +40,7 @@
             "APIManagementServiceUrl": "[concat(parameters('templatesBaseUrl'), '/APIManagementService.json')]",
             "virtualNetworkNSGUrl": "[concat(parameters('templatesBaseUrl'), '/virtualNetworkNSG.json')]",
             "networkInterfaceUrl": "[concat(parameters('templatesBaseUrl'), '/networkInterface.json')]",
+            "sqlServerVMUrl": "[concat(parameters('templatesBaseUrl'), '/sqlServer.json')]",
 
             "CDNEndpointsUrl": "[concat(parameters('templatesBaseUrl'), '/CDNEndpoint.json')]"
         },
@@ -46,11 +53,15 @@
 
         "networkSecurityGroupName": "[concat(variables('prefix'), 'nsg')]",
         "virtualNetworkName": "[concat(variables('prefix'), 'vnt')]",
+        "networkInterfaceName": "[concat(variables('prefix'), 'nic')]",
+        "vmName": "[concat(variables('prefix'), 'vm')]",
+        "osDiskName": "[concat(variables('prefix'), 'dsk')]",
 
         "VnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
         "derivedIds": {
             "subnet": "[concat(variables('VnetID'),'/subnets/', 'default')]",
-            "nsg": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('virtualNetworkName'))]"
+            "nsg": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]",
+            "nic": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]"
         }
     },
     "resources": [
@@ -227,6 +238,9 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "comments": "This resource will create the network interface",
+            "dependsOn": [
+                "VirtualNetworkNSG"
+            ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -242,6 +256,45 @@
                     },
                     "subnetRef": {
                         "value": "[variables('derivedIds').subnet]"
+                    },
+                    "nsgId": {
+                        "value": "[variables('derivedIds').nsg]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "SQLServerVM",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "comments": "This resource will create the SQL VM",
+            "dependsOn": [
+                "networkInterface"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').sqlServerVMUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "vmName": {
+                        "value": "[variables('vmName')]"
+                    },
+                    "osDiskName": {
+                        "value": "[variables('osDiskName')]"
+                    },
+                    "nicId": {
+                        "value": "[variables('derivedIds').nic]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('vmAdminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('vmAdminPassword')]"
                     }
                 }
             }

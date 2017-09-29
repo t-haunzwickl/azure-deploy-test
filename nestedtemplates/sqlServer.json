@@ -1,0 +1,65 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },
+        "vmName": {
+            "type": "string"
+        },
+        "osDiskName": {
+            "type": "string"
+        },
+        "adminUsername": {
+            "type": "string"
+        },
+        "adminPassword": {
+            "type": "securestring"
+        },
+        "nicId": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2016-04-30-preview",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('vmName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Basic_A2"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('vmName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftSQLServer",
+                        "offer": "SQL2016SP1-WS2016",
+                        "sku": "Standard",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "[parameters('osDiskName')]",
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS"
+                        }
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[parameters('nicId')]"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
