@@ -9,6 +9,12 @@
             "type": "string",
             "defaultValue": "tst"
         },
+        "apiPublisherEmail": {
+            "type": "string"
+        },
+        "apiPublisherName": {
+            "type": "string"
+        },
         "templatesBaseUrl": {
             "type": "string",
             "metadata": {
@@ -168,6 +174,12 @@
                     },
                     "prefix": {
                         "value": "[variables('prefix')]"
+                    },
+                    "publisherEmail": {
+                        "value": "[parameters('apiPublisherEmail')]"
+                    },
+                    "publisherName": {
+                        "value": "[parameters('apiPublisherName')]"
                     }
                 }
             }
