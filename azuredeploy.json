@@ -27,11 +27,11 @@
         "location": "[resourceGroup().location]",
         "prefix": "[concat(parameters('team'), '-', parameters('environment'), '-')]",
         "artifacts": {
-            "provisioningWebAppsUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningWebApps.json')]",
-            "provisioningCosmosDBUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningCosmosDB.json')]",
-            "provisioningCDNProfileUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningCDNProfile.json')]",
-            "provisioningEventGridTopic": "[concat(parameters('templatesBaseUrl'), '/provisioningEventGridTopic.json')]",
-            "provisioningAPIManagementServiceUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningAPIManagementService.json')]",
+            "WebAppsUrl": "[concat(parameters('templatesBaseUrl'), '/WebApps.json')]",
+            "CosmosDBUrl": "[concat(parameters('templatesBaseUrl'), '/CosmosDB.json')]",
+            "CDNProfileUrl": "[concat(parameters('templatesBaseUrl'), '/CDNProfile.json')]",
+            "EventGridTopic": "[concat(parameters('templatesBaseUrl'), '/EventGridTopic.json')]",
+            "APIManagementServiceUrl": "[concat(parameters('templatesBaseUrl'), '/APIManagementService.json')]",
 
             "configureCDNEndpoints": "[concat(parameters('templatesBaseUrl'), '/configureCDNEndpoint.json')]"
         },
@@ -44,14 +44,14 @@
     },
     "resources": [
         {
-            "name": "ProvisioningWebApps",
+            "name": "WebApps",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "comments": "This resource will create an App Service as well as WebApps",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('artifacts').provisioningWebAppsUrl]",
+                    "uri": "[variables('artifacts').WebAppsUrl]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -68,14 +68,14 @@
             }
         },
         {
-            "name": "ProvisioningCosmosDB",
+            "name": "CosmosDB",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "comments": "This resource will create a CosmosDB",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('artifacts').provisioningCosmosDBUrl]",
+                    "uri": "[variables('artifacts').CosmosDBUrl]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -89,14 +89,14 @@
             }
         },
         {
-            "name": "ProvisioningCDNProfile",
+            "name": "CDNProfile",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "comments": "This resource will create a CDN Profile",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('artifacts').provisioningCDNProfileUrl]",
+                    "uri": "[variables('artifacts').CDNProfileUrl]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -115,7 +115,7 @@
             "apiVersion": "2015-01-01",
             "comments": "This resource will add CDN Endpoints",
             "dependsOn": [
-                "ProvisioningCDNProfile"
+                "CDNProfile"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -137,14 +137,14 @@
             }
         },
         {
-            "name": "ProvisioningEventGridTopic",
+            "name": "EventGridTopic",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "comments": "This resource will deploy Event Grid Topic",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('artifacts').provisioningEventGridTopic]",
+                    "uri": "[variables('artifacts').EventGridTopic]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -158,14 +158,14 @@
             }
         },
         {
-            "name": "ProvisioningAPIManagementService",
+            "name": "APIManagementService",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "comments": "This resource will deploy API Management Service",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('artifacts').provisioningAPIManagementServiceUrl]",
+                    "uri": "[variables('artifacts').APIManagementServiceUrl]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
