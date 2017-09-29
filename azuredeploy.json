@@ -24,15 +24,17 @@
             "provisioningWebAppsUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningWebApps.json')]",
             "provisioningCosmosDBUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningCosmosDB.json')]",
             "provisioningCDNProfileUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningCDNProfile.json')]",
-            "configureCDNEndpoints": "[concat(parameters('templatesBaseUrl'), '/configureCDNEndpoints.json')]"
+            "provisioningEventGridTopic": "[concat(parameters('templatesBaseUrl'), '/provisioningEventGridTopic.json')]",
+            //"provisioningAPIManagementServiceUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningAPIManagementService.json')]",
+
+            "configureCDNEndpoints": "[concat(parameters('templatesBaseUrl'), '/configureCDNEndpoint.json')]"
         },
-        "siteNames": [
+        "siteName": [
             "[concat(variables('prefix'), 'main')]",
             "[concat(variables('prefix'), 'usr')]",
             "[concat(variables('prefix'), 'usr-adm')]",
             "[concat(variables('prefix'), 'ten')]"
         ]
-
     },
     "resources": [
         {
@@ -52,6 +54,9 @@
                   },
                   "prefix": {
                       "value": "[variables('prefix')]"
+                  },
+                  "siteName": {
+                      "value": "[variables('siteName')]"
                   }
                 }
             }
@@ -81,7 +86,7 @@
             "name": "ProvisioningCDNProfile",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
-            "comments": "This resource will create a CDN PRofile",
+            "comments": "This resource will create a CDN Profile",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -103,10 +108,13 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "comments": "This resource will add CDN Endpoints",
+            "dependsOn": [
+                "ProvisioningCDNProfile"
+            ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('artifacts').]",
+                    "uri": "[variables('artifacts').configureCDNEndpoints]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -116,8 +124,29 @@
                   "prefix": {
                       "value": "[variables('prefix')]"
                   },
-                  "siteNames": {
-                      "value": "[variables('siteNames')]"
+                  "siteName": {
+                      "value": "[variables('siteName')]"
+                  }
+                }
+            }
+        },
+        {
+            "name": "ProvisioningEventGridTopic",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "comments": "This resource will deploy Event Grid Topic",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').provisioningEventGridTopic]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                  "location": {
+                      "value": "[variables('location')]"
+                  },
+                  "prefix": {
+                      "value": "[variables('prefix')]"
                   }
                 }
             }

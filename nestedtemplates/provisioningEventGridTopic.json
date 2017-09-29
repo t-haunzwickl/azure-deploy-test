@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "prefix": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "apiVersion": "2017-06-15-preview",
+        // Name not correct??
+        "eventGridName": "[concat(parameters('prefix'), 'egt')]" ,
+        // TODO: remove later when GA
+        "location": "WestUS2"
+    },
+    "resources": [
+        {
+            "apiVersion": "[variables('apiVersion')]",
+            "name": "[variables('eventGridName')]",
+            "type": "Microsoft.EventGrid/topics",
+            "location": "[variables('location')]",
+            /*"tags": {
+                "displayName": "EventGrid"
+            },*/
+            "properties": {
+                "name": "[variables('eventGridName')]"
+            }
+        }
+    ]
+}
