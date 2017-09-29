@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "prefix": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "siteName": {
+            "type": "array",
+            "defaultValue": [
+                "[concat(parameters('prefix'), 'main')]",
+                "[concat(parameters('prefix'), 'usr')]",
+                "[concat(parameters('prefix'), 'usr-adm')]",
+                "[concat(parameters('prefix'), 'ten')]"
+            ]
+        }
+    },
+    "variables": {
+        "cdnProfileName": "[concat(parameters('prefix'), 'cdn')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2016-04-02",
+            "copy": {
+                "name": "CDNEndpoints",
+                "count": "[length(parameters('siteName'))]"
+            },
+            "name": "[concat(variables('cdnProfileName'),'/',parameters('siteName')[copyIndex()],'-cep')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "isHttpAllowed": true,
+                "isHttpsAllowed": true,
+                "originHostHeader": "[concat(parameters('siteName')[copyIndex()], '.azurewebsites.net')]",
+                "origins": [
+                    {
+                        "name": "[concat(parameters('siteName')[copyIndex()], '-azurewebsites-net')]",
+                        "properties": {
+                            "hostName": "[concat(parameters('siteName')[copyIndex()], '.azurewebsites.net')]",
+                            "httpPort": 80,
+                            "httpsPort": 443
+                        }
+                    }
+                ]
+            },
+            "type": "Microsoft.Cdn/profiles/endpoints"
+        }
+    ]
+}

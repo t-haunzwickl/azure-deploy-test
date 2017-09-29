@@ -23,8 +23,16 @@
         "artifacts": {
             "provisioningWebAppsUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningWebApps.json')]",
             "provisioningCosmosDBUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningCosmosDB.json')]",
-            "provisioningCDNProfileUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningCDNProfile.json')]"
-        }
+            "provisioningCDNProfileUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningCDNProfile.json')]",
+            "configureCDNEndpoints": "[concat(parameters('templatesBaseUrl'), '/configureCDNEndpoints.json')]"
+        },
+        "siteNames": [
+            "[concat(variables('prefix'), 'main')]",
+            "[concat(variables('prefix'), 'usr')]",
+            "[concat(variables('prefix'), 'usr-adm')]",
+            "[concat(variables('prefix'), 'ten')]"
+        ]
+
     },
     "resources": [
         {
@@ -77,7 +85,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('artifacts')]",
+                    "uri": "[variables('artifacts').provisioningCDNProfileUrl]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -86,6 +94,30 @@
                   },
                   "prefix": {
                       "value": "[variables('prefix')]"
+                  }
+                }
+            }
+        },
+        {
+            "name": "ConfigureCDNEndpoints",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "comments": "This resource will add CDN Endpoints",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                  "location": {
+                      "value": "[variables('location')]"
+                  },
+                  "prefix": {
+                      "value": "[variables('prefix')]"
+                  },
+                  "siteNames": {
+                      "value": "[variables('siteNames')]"
                   }
                 }
             }
