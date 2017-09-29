@@ -1,0 +1,41 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "prefix": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "adminEmail": {
+            "type": "string"
+        },
+        "orgName": {
+            "type": "string"  
+        }
+    },
+    "variables": {
+        "apiName": "[concat(parameters('prefix'), 'api')]",
+        "sku": {
+            "name": "Developer",
+            "capacity": 1
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2017-03-01",
+            "name": "[variables('apiName')]",
+            "location": "[parameters('location')]",
+            "type": "Microsoft.ApiManagement/service",
+            "sku": {
+                "name": "[variables('sku').name]",
+                "capacity": "[variables('sku').capacity]"
+            },
+            "properties": {
+                "publisherEmail": "[parameters('adminEmail')]",
+                "publisherName": "[parameters('orgName')]"
+            }
+        },
+    ]
+}

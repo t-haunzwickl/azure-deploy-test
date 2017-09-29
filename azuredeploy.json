@@ -25,7 +25,7 @@
             "provisioningCosmosDBUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningCosmosDB.json')]",
             "provisioningCDNProfileUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningCDNProfile.json')]",
             "provisioningEventGridTopic": "[concat(parameters('templatesBaseUrl'), '/provisioningEventGridTopic.json')]",
-            //"provisioningAPIManagementServiceUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningAPIManagementService.json')]",
+            "provisioningAPIManagementServiceUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningAPIManagementService.json')]",
 
             "configureCDNEndpoints": "[concat(parameters('templatesBaseUrl'), '/configureCDNEndpoint.json')]"
         },
@@ -49,15 +49,15 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                  "location": {
-                      "value": "[variables('location')]"
-                  },
-                  "prefix": {
-                      "value": "[variables('prefix')]"
-                  },
-                  "siteName": {
-                      "value": "[variables('siteName')]"
-                  }
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "prefix": {
+                        "value": "[variables('prefix')]"
+                    },
+                    "siteName": {
+                        "value": "[variables('siteName')]"
+                    }
                 }
             }
         },
@@ -73,12 +73,12 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                  "location": {
-                      "value": "[variables('location')]"
-                  },
-                  "prefix": {
-                      "value": "[variables('prefix')]"
-                  }
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "prefix": {
+                        "value": "[variables('prefix')]"
+                    }
                 }
             }
         },
@@ -94,12 +94,12 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                  "location": {
-                      "value": "[variables('location')]"
-                  },
-                  "prefix": {
-                      "value": "[variables('prefix')]"
-                  }
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "prefix": {
+                        "value": "[variables('prefix')]"
+                    }
                 }
             }
         },
@@ -118,15 +118,15 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                  "location": {
-                      "value": "[variables('location')]"
-                  },
-                  "prefix": {
-                      "value": "[variables('prefix')]"
-                  },
-                  "siteName": {
-                      "value": "[variables('siteName')]"
-                  }
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "prefix": {
+                        "value": "[variables('prefix')]"
+                    },
+                    "siteName": {
+                        "value": "[variables('siteName')]"
+                    }
                 }
             }
         },
@@ -142,12 +142,33 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                  "location": {
-                      "value": "[variables('location')]"
-                  },
-                  "prefix": {
-                      "value": "[variables('prefix')]"
-                  }
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "prefix": {
+                        "value": "[variables('prefix')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "ProvisioningAPIManagementService",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "comments": "This resource will deploy API Management Service",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').provisioningAPIManagementServiceUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "prefix": {
+                        "value": "[variables('prefix')]"
+                    }
                 }
             }
         }
