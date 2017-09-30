@@ -8,10 +8,10 @@
         "location": {
             "type": "string"
         },
-        "adminEmail": {
+        "publisherEmail": {
             "type": "string"
         },
-        "orgName": {
+        "publisherName": {
             "type": "string"  
         }
     },
@@ -33,8 +33,8 @@
                 "capacity": "[variables('sku').capacity]"
             },
             "properties": {
-                "publisherEmail": "[parameters('adminEmail')]",
-                "publisherName": "[parameters('orgName')]"
+                "publisherEmail": "[parameters('publisherEmail')]",
+                "publisherName": "[parameters('publisherName')]"
             }
         }
     ]
