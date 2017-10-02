@@ -21,6 +21,12 @@
             "type": "string"
         }
     },
+    "variables": {
+        // TODO: change when if is available
+        "shutdownTimeZones": {
+            "southeastasia": "SE Asia Standard Time"
+        }
+    },
     "resources": [
         {
             "apiVersion": "2016-04-30-preview",
@@ -60,6 +66,29 @@
                     ]
                 }
             }
-        }
+        },
+         {
+            "type": "Microsoft.Devtestlab/Schedules",
+            "name": "[parameters('vmName')]",
+            "apiVersion": "2016-05-15",
+            "location": "[parameters('location')]",
+            "scale": null,
+            "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                    "time": "2000"
+                },
+                "timeZoneId": "[variables('shutdownTimeZones')[parameters('location')]]",
+                "notificationSettings": {
+                    "status": "Disabled",
+                    "timeInMinutes": 30
+                },
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+            ]
+        },
     ]
 }
