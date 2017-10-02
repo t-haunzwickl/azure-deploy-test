@@ -12,8 +12,8 @@
     "variables": {
         "cdnPofileName": "[concat(parameters('prefix'), 'cdn')]",
         "skuCDN": {
-            "name": "standard_akamai"
-            // "name": "Premium_Verizon"
+            //"name": "standard_akamai"
+            "name": "Premium_Verizon"
         },
         "profileProperties": {
             "provisioningState": "Succeeded",
