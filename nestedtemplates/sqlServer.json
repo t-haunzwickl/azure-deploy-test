@@ -19,6 +19,9 @@
         },
         "nicId": {
             "type": "string"
+        },
+        "shutdownScheduler": {
+            "type": "string"
         }
     },
     "variables": {
@@ -69,7 +72,7 @@
         },
          {
             "type": "Microsoft.Devtestlab/Schedules",
-            "name": "[parameters('vmName')]",
+            "name": "[parameters('shutdownScheduler')]",
             "apiVersion": "2016-05-15",
             "location": "[parameters('location')]",
             "scale": null,

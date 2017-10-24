@@ -27,6 +27,14 @@
         },
         "vmAdminPassword": {
             "type": "securestring"
+        },
+        "publicIpMethod": {
+            "type": "string",
+            "allowedValues": [
+                "Dynamic",
+                "Static"
+            ],
+            "defaultValue": "Dynamic"
         }
     },
     "variables": {
@@ -55,6 +63,7 @@
         "virtualNetworkName": "[concat(variables('prefix'), 'vnt')]",
         "networkInterfaceName": "[concat(variables('prefix'), 'nic')]",
         "vmName": "[concat(variables('prefix'), 'vm')]",
+        "vmShutdownScheduler": "[concat(variables('prefix'), 'dts')]",
         "osDiskName": "[concat(variables('prefix'), 'dsk')]",
 
         "VnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
@@ -259,6 +268,9 @@
                     },
                     "nsgId": {
                         "value": "[variables('derivedIds').nsg]"
+                    },
+                    "method": {
+                        "value": "[parameters('publicIpMethod')]"
                     }
                 }
             }
@@ -295,6 +307,9 @@
                     },
                     "adminPassword": {
                         "value": "[parameters('vmAdminPassword')]"
+                    },
+                    "shutdownScheduler": {
+                        "value": "[variables('vmShutdownScheduler')]"
                     }
                 }
             }
