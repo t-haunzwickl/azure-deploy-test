@@ -55,10 +55,7 @@
                     "osDisk": {
                         "name": "[parameters('osDiskName')]",
                         "caching": "ReadWrite",
-                        "createOption": "FromImage",
-                        "managedDisk": {
-                            "storageAccountType": "Standard_LRS"
-                        }
+                        "createOption": "FromImage"
                     }
                 },
                 "networkProfile": {
