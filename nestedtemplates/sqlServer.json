@@ -27,7 +27,8 @@
     "variables": {
         // TODO: change when if is available
         "shutdownTimeZones": {
-            "southeastasia": "SE Asia Standard Time"
+            "southeastasia": "SE Asia Standard Time",
+            "westeurope": "Central Europe Standard Time"
         }
     },
     "resources": [
