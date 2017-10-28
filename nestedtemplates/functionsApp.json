@@ -10,6 +10,12 @@
         },
         "hostingPlanName": {
             "type": "string"
+        },
+        "storageAccountName": {
+            "type": "string"
+        },
+        "storageAccountId": {
+            "type": "string"
         }
     },
     "variables": {
@@ -39,7 +45,34 @@
             "apiVersion": "2016-08-01",
             "location": "[parameters('location')]",
             "scale": null,
-            "properties": {
+
+            "siteConfig": {
+                "appSettings": [
+                    {
+                        "name": "AzureWebJobsDashboard",
+                        "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';AccountKey=', listKeys(parameters('storageAccountid'),'2015-05-01-preview').key1)]"
+                    },
+                    {
+                        "name": "AzureWebJobsStorage",
+                        "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';AccountKey=', listKeys(parameters('storageAccountid'),'2015-05-01-preview').key1)]"
+                    },
+                    {
+                        "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                        "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';AccountKey=', listKeys(parameters('storageAccountid'),'2015-05-01-preview').key1)]"
+                    },
+                    {
+                        "name": "WEBSITE_CONTENTSHARE",
+                        "value": "[toLower(parameters('functionsAppName'))]"
+                    },
+                    {
+                        "name": "FUNCTIONS_EXTENSION_VERSION",
+                        "value": "~1"
+                    }
+                ]
+            },
+
+
+            /*"properties": {
                 "enabled": true,
                 "hostNameSslStates": [
                     {
@@ -70,7 +103,7 @@
                 "containerSize": 1536,
                 "dailyMemoryTimeQuota": 0,
                 "cloningInfo": null
-            },
+            },*/
             "dependsOn": [
                 "[concat('Microsoft.Web/serverFarms/', parameters('hostingPlanName'))]"
             ]
